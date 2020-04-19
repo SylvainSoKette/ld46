@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
-[ext_resource path="res://entities/animals/Animal.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/entities/animals/Animal.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Game.gd" type="Script" id=3]
-[ext_resource path="res://entities/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://ui/FadeEffect.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/entities/Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/ui/FadeEffect.tscn" type="PackedScene" id=5]
 [ext_resource path="res://images/game-background.png" type="Texture" id=6]
 [ext_resource path="res://images/palisade.png" type="Texture" id=7]
+[ext_resource path="res://scenes/entities/projectiles/Projectile.tscn" type="PackedScene" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 181, 12 )
@@ -62,6 +63,15 @@ shape = SubResource( 3 )
 
 [node name="Projectiles" type="Node2D" parent="Scene"]
 
+[node name="Projectile" parent="Scene/Projectiles" instance=ExtResource( 8 )]
+position = Vector2( 168, 140 )
+
+[node name="Projectile2" parent="Scene/Projectiles" instance=ExtResource( 8 )]
+position = Vector2( 244, 140 )
+
+[node name="Projectile3" parent="Scene/Projectiles" instance=ExtResource( 8 )]
+position = Vector2( 212, 68 )
+
 [node name="Player" parent="Scene" instance=ExtResource( 4 )]
 position = Vector2( 24, 112 )
 
@@ -71,20 +81,6 @@ position = Vector2( 16, 128 )
 [node name="Animal" parent="Scene/Animals" instance=ExtResource( 2 )]
 position = Vector2( 172, 32 )
 
-[node name="Animal2" parent="Scene/Animals" instance=ExtResource( 2 )]
-position = Vector2( 72, 32 )
-
-[node name="Animal3" parent="Scene/Animals" instance=ExtResource( 2 )]
-position = Vector2( 108, 32 )
-
-[node name="Animal4" parent="Scene/Animals" instance=ExtResource( 2 )]
-position = Vector2( 224, 32 )
-
-[node name="Stats" parent="Scene/Animals/Animal4" index="7"]
-MAX_HP = 5
-
 [node name="FadeEffect" parent="." instance=ExtResource( 5 )]
 visible = false
 [connection signal="can_start" from="FadeEffect" to="." method="_on_FadeEffect_can_start"]
-
-[editable path="Scene/Animals/Animal4"]

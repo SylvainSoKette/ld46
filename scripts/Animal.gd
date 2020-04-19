@@ -1,129 +1,155 @@
 extends KinematicBody2D
+class_name Animal
 
 export var MOVE_SPEED = 20
 export var RUN_FACTOR = 3
 
 enum STATE {
-	IDLE,
-	MOVE_LEFT,
-	MOVE_RIGHT,
-	EAT,
+	TURN,
+	MOVE,
+	RUN,
 	ATTACK,
-	FLEE_LEFT,
-	FLEE_RIGHT
+	EAT
 }
 
-var current_state = STATE.MOVE_LEFT
+var current_state = STATE.MOVE
 var current_direction = Vector2.LEFT
+var current_speed = 0
 
 onready var timer = $Timer
 onready var hitbox_pivot = $HitboxPivot
 onready var debug_label = $DebugLabel
 onready var stats = $Stats
+onready var hurtbox = $HitboxPivot/Hurtbox
+onready var front_detector = $HitboxPivot/Frontdetecter
+onready var back_detector = $HitboxPivot/Backdetector
 
 
 ###########################
 # ENGINE ##################
 ###########################
+func get_class():
+	return 'Animal'
+
 func _ready():
 	randomize()
 
 func _process(dt):
-	call({
-		STATE.IDLE: "process_idle",
-		STATE.MOVE_LEFT: "process_move_left",
-		STATE.MOVE_RIGHT: "process_move_right",
-		STATE.EAT: "process_eat",
-		STATE.ATTACK: "process_attack",
-		STATE.FLEE_LEFT: "process_flee_left",
-		STATE.FLEE_RIGHT: "process_flee_right",
-	}[current_state], dt)
-
+	move_and_collide(current_direction  * current_speed * dt)
 
 ###########################
 # STATES ##################
 ###########################
-func setup_idle():
-	debug_label.text = "idle"
+func reset():
+	current_speed = 0
 
-func process_idle(dt):
-	pass
+func turn():
+	debug_label.text = "turn"
+	if current_direction == Vector2.RIGHT:
+		current_direction = Vector2.LEFT
+		hitbox_pivot.rotation_degrees = 180
+	else:
+		current_direction = Vector2.RIGHT
+		hitbox_pivot.rotation_degrees = 0
 
-func setup_move_left():
-	debug_label.text = "move_left"
-	current_direction = Vector2.LEFT
-	hitbox_pivot.rotation_degrees = 180
+func move():
+	debug_label.text = "move"
+	current_speed = MOVE_SPEED
 
-func process_move_left(dt):
-	move(dt)
-	
-func setup_move_right():
-	debug_label.text = "move_right"
-	current_direction = Vector2.RIGHT
-	hitbox_pivot.rotation_degrees = 0
+func run():
+	debug_label.text = "run"
+	current_speed = MOVE_SPEED * RUN_FACTOR
 
-func process_move_right(dt):
-	move(dt)
+func attack(enemy_hitbox):
+	enemy_hitbox.emit_signal('hit')
 
-func setup_eat():
+func eat():
 	debug_label.text = "eat"
-
-func process_eat(dt):
-	pass
-
-func setup_attack():
-	debug_label.text = "attack"
-	for area in get_node("HitboxPivot/Hurtbox").get_overlapping_areas():
-		if area.name == 'Hitbox':
-			area.emit_signal('hit')
-			return # stop at first enemy hit
-
-func process_attack(dt):
-	pass
-
-func setup_flee_left():
-	debug_label.text = "flee_left"
-	current_direction = Vector2.LEFT
-	hitbox_pivot.rotation_degrees = 180
-
-func process_flee_left(dt):
-	move(dt, true)
-
-func setup_flee_right():
-	debug_label.text = "flee_right"
-	current_direction = Vector2.RIGHT
-	hitbox_pivot.rotation_degrees = 0
-
-func process_flee_right(dt):
-	move(dt, true)
 
 func choose_state():
 	var states = [
-		STATE.IDLE,
-		STATE.ATTACK, STATE.EAT,
-		STATE.FLEE_LEFT, STATE.FLEE_RIGHT,
-		STATE.MOVE_LEFT, STATE.MOVE_RIGHT
+		STATE.TURN,
+		STATE.MOVE,
+		STATE.RUN,
+		STATE.ATTACK,
+		STATE.EAT
 	]
 	current_state = get_random_from_array(states)
-	call({
-		STATE.IDLE: "setup_idle",
-		STATE.MOVE_LEFT: "setup_move_left",
-		STATE.MOVE_RIGHT: "setup_move_right",
-		STATE.EAT: "setup_eat",
-		STATE.ATTACK: "setup_attack",
-		STATE.FLEE_LEFT: "setup_flee_left",
-		STATE.FLEE_RIGHT: "setup_flee_right",
-	}[current_state])
 
-func move(dt, run=false):
-	if run:
-		move_and_collide(current_direction  * MOVE_SPEED * RUN_FACTOR * dt)
-	else:
-		move_and_collide(current_direction  * MOVE_SPEED * dt)
+	var food = is_food_at_range()
+	if food:
+		current_state = STATE.EAT
+	if is_food_front():
+		current_state = STATE.MOVE
+	if is_food_back():
+		current_state = STATE.TURN
+
+	var enemy = is_enemy_at_range()
+	if enemy:
+		attack(enemy)
+	if is_enemy_front():
+		print("enemy front !")
+	if is_enemy_back():
+		print("enemy back !")
+	
+
+#	var food_dist = is_food_front()
+#
+#	call({
+#		STATE.TURN: "turn",
+#		STATE.MOVE: "move",
+#		STATE.RUN: "run",
+#		STATE.ATTACK: "attack",
+#		STATE.EAT: "eat",
+#	}[current_state])
 
 ###########################
 # UTILS ###################
 ###########################
+func is_food_front():
+	for body in front_detector.get_overlapping_bodies():
+		if body.get_class() == 'Projectile':
+			return true
+	return false
+	
+func is_food_back():
+	for body in back_detector.get_overlapping_bodies():
+		if body.get_class() == 'Projectile':
+			return true
+	return false
+
+func is_food_at_range():
+	for body in hurtbox.get_overlapping_bodies():
+		if body.get_class() == 'Projectile':
+			return body
+	return false
+
+func is_enemy_front():
+	for body in front_detector.get_overlapping_bodies():
+		if body.get_instance_id() == self.get_instance_id():
+			print("is myself lol")
+			continue
+		if body.get_class() == 'Animal':
+			return true
+	return false
+	
+func is_enemy_back():
+	for body in back_detector.get_overlapping_bodies():
+		if body.get_instance_id() == self.get_instance_id():
+			print("is myself lol")
+			continue
+		if body.get_class() == 'Animal':
+			return true
+	return false
+
+func is_enemy_at_range():
+	for area in hurtbox.get_overlapping_areas():
+		if area.get_node("../..").get_instance_id() == self.get_instance_id():
+			continue
+		if area.name == 'Hitbox':
+			return area
+	return false
+
 func get_random_from_array(array):
 	return array[int(rand_range(0, array.size() - 1))]
 

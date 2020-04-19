@@ -1,19 +1,25 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://scenes/entities/utils/Hitbox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Animal.gd" type="Script" id=2]
-[ext_resource path="res://entities/utils/Hurtbox.tscn" type="PackedScene" id=3]
-[ext_resource path="res://entities/utils/Hitbox.tscn" type="PackedScene" id=4]
-[ext_resource path="res://entities/utils/Stats.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/entities/utils/Stats.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/entities/utils/Hurtbox.tscn" type="PackedScene" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
 height = 4.0
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 12, 8 )
 
 [sub_resource type="CircleShape2D" id=3]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 44, 16 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 12, 16 )
 
 [node name="Animal" type="KinematicBody2D"]
 collision_layer = 0
@@ -22,7 +28,7 @@ script = ExtResource( 2 )
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 1.19209e-06, -12 )
 scale = Vector2( 0.375, 0.375 )
-texture = ExtResource( 1 )
+texture = ExtResource( 5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -8 )
@@ -55,21 +61,38 @@ __meta__ = {
 [node name="HitboxPivot" type="Position2D" parent="."]
 position = Vector2( 0, -8 )
 
-[node name="Hurtbox" parent="HitboxPivot" instance=ExtResource( 3 )]
+[node name="Hurtbox" parent="HitboxPivot" instance=ExtResource( 4 )]
 position = Vector2( 24, 0 )
+collision_mask = 6
 
 [node name="CollisionShape2D" parent="HitboxPivot/Hurtbox" index="0"]
-shape = SubResource( 4 )
+shape = SubResource( 2 )
 
-[node name="Hitbox" parent="HitboxPivot" instance=ExtResource( 4 )]
+[node name="Hitbox" parent="HitboxPivot" instance=ExtResource( 1 )]
 position = Vector2( 0, -4 )
 
 [node name="CollisionShape2D" parent="HitboxPivot/Hitbox" index="0"]
 shape = SubResource( 3 )
 
+[node name="Frontdetecter" type="Area2D" parent="HitboxPivot"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxPivot/Frontdetecter"]
+position = Vector2( 44, -8 )
+shape = SubResource( 4 )
+
+[node name="Backdetector" type="Area2D" parent="HitboxPivot"]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxPivot/Backdetector"]
+position = Vector2( -12, -8 )
+shape = SubResource( 5 )
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
-[node name="Stats" parent="." instance=ExtResource( 5 )]
+[node name="Stats" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, -24 )
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="hit" from="HitboxPivot/Hitbox" to="." method="_on_Hitbox_hit"]
