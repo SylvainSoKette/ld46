@@ -10,15 +10,17 @@ func _process(dt):
 		get_tree().quit()
 
 func update_character_portrait():
-	Globals.current_char = Globals.current_char % len(Globals.characters)
 	character_portrait.get_node("DebugName").text = Globals.characters[Globals.current_char]
+	character_portrait.texture.region = Rect2(Globals.current_char * 32, 0, 32, 32)
 
 func _on_Previous_pressed():
 	Globals.current_char -= 1
+	Globals.current_char = posmod(Globals.current_char, len(Globals.characters))
 	update_character_portrait()
 
 func _on_Next_pressed():
 	Globals.current_char += 1
+	Globals.current_char = posmod(Globals.current_char, len(Globals.characters))
 	update_character_portrait()
 
 func _on_Start_pressed():

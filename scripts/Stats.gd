@@ -23,4 +23,4 @@ func _process(delta):
 
 func take_damage(amount):
 	hp -= amount
-	hp = max(0, hp)
+	hp = int(clamp(hp, 0, MAX_HP))
