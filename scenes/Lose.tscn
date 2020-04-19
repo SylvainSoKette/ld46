@@ -54,5 +54,6 @@ text = "Back to main menu"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
+volume_db = 0.5
 autoplay = true
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Back" to="." method="_on_Back_pressed"]

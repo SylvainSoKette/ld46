@@ -3,7 +3,7 @@ extends Control
 const win_text = "Consecutive win: "
 
 onready var win_label = $VBoxContainer/WinLabel
-onready var character_portrait = $Menu/Body/Character/Portrait
+onready var character_portrait = $VBoxContainer/Portrait
 
 func _ready():
 	update_win_count_label()

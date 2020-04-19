@@ -133,6 +133,7 @@ text = "Made by SoKette for Ludum Dare 46"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
+volume_db = 1.0
 autoplay = true
 [connection signal="pressed" from="Menu/Body/Buttons/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="Menu/Body/Buttons/Story" to="." method="_on_Story_pressed"]

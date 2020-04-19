@@ -13,6 +13,8 @@ var current_direction = Vector2.RIGHT
 var current_speed = 0
 
 onready var sprite = $Sprite
+onready var animation = $AnimationPlayer
+
 onready var timer = $Timer
 onready var hitbox_pivot = $HitboxPivot
 onready var debug_label = $DebugLabel
@@ -43,6 +45,7 @@ func _process(dt):
 ###########################
 func turn():
 	debug_label.text = "turn"
+	animation.play('idle')
 	current_speed = 0
 	if current_direction == Vector2.RIGHT:
 		current_direction = Vector2.LEFT
@@ -55,21 +58,26 @@ func turn():
 
 func move():
 	debug_label.text = "move"
+	animation.play('walk')
 	current_speed = MOVE_SPEED
 
 func run():
 	debug_label.text = "run"
+	animation.play('run')
 	current_speed = MOVE_SPEED * RUN_FACTOR
 
 func attack(enemy_hitbox):
+	debug_label.text = "attack"
+	animation.play('atk')
 	current_speed = 0
 	enemy_hitbox.emit_signal('hit')
 
 func eat(food):
+	debug_label.text = "eat"
+	animation.play('eat')
 	current_speed = 0
 	food.get_eaten()
 	stats.take_damage(-1)
-	debug_label.text = "eat"
 
 func choose_action():
 	var food = is_food_at_range()
@@ -78,9 +86,9 @@ func choose_action():
 	# 'AI' -> if galore
 	if stats.hp < stats.MAX_HP and food:
 		eat(food)
-	elif is_food_front():
+	elif stats.hp < stats.MAX_HP and is_food_front():
 		run()
-	elif is_food_back():
+	elif stats.hp < stats.MAX_HP and is_food_back():
 		turn()
 	else:
 		if enemy:
@@ -92,6 +100,10 @@ func choose_action():
 		else:
 			if food:
 				eat(food)
+			elif is_food_front():
+				run()
+			elif is_food_back():
+				turn()
 			else:
 				var rand = randi()
 				rand = rand % 4
