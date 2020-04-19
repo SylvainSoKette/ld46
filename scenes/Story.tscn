@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://ui/FadeEffect.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/Story.gd" type="Script" id=2]
+[ext_resource path="res://fonts/press_start_2P_8px.tres" type="DynamicFont" id=3]
 
 [node name="Story" type="Control"]
 anchor_right = 1.0
@@ -13,7 +14,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 8.0
-margin_top = 8.0
+margin_top = 16.0
 margin_right = 312.0
 margin_bottom = 172.0
 grow_horizontal = 0
@@ -25,24 +26,29 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 margin_right = 304.0
-margin_bottom = 133.0
+margin_bottom = 129.0
+custom_fonts/font = ExtResource( 3 )
 text = "The year is 2020, a new kind of plague struck the globe and doomed the entire civilisation.
-Stuck in quarantine, mankind invented a new kind of sport : BACKYARD MONSTER BATTLES.
+
+Stuck in quarantine, mankind invented a new kind of sport :
+BACKYARD MONSTER BATTLES.
+
 Choose your champion and help him win by throwing food at him ! Annoy his opponents with stones !
 (But don't do this in real life...)"
 align = 1
 autowrap = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 137.0
+margin_top = 133.0
 margin_right = 304.0
-margin_bottom = 157.0
+margin_bottom = 147.0
 alignment = 1
 
 [node name="Back" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 131.0
-margin_right = 173.0
-margin_bottom = 20.0
+margin_left = 130.0
+margin_right = 174.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 3 )
 text = "Back"
 
 [node name="FadeEffect" parent="." instance=ExtResource( 1 )]

@@ -47,7 +47,6 @@ func _process(dt):
 
 func throw_item():
 	var p = projectile.instance()
-	print(player_hand.position)
 	p.position = throw_from
 	p.angular_velocity = randf() * 25
 	p.linear_velocity = throw_direction * throw_power

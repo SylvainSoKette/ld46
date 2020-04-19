@@ -80,6 +80,11 @@ position = Vector2( 108, 32 )
 [node name="Animal4" parent="Scene/Animals" instance=ExtResource( 2 )]
 position = Vector2( 224, 32 )
 
+[node name="Stats" parent="Scene/Animals/Animal4" index="7"]
+MAX_HP = 5
+
 [node name="FadeEffect" parent="." instance=ExtResource( 5 )]
 visible = false
 [connection signal="can_start" from="FadeEffect" to="." method="_on_FadeEffect_can_start"]
+
+[editable path="Scene/Animals/Animal4"]

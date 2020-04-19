@@ -1,6 +1,11 @@
 extends RigidBody2D
 
+onready var sprite = $Sprite
 onready var animation = $AnimationPlayer
+
+func _ready():
+	var rand = randi() % 4
+	sprite.set_frame(rand)
 
 func _process(dt):
 	var niceness = 8
