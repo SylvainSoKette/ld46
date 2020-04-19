@@ -81,7 +81,6 @@ func _process(dt):
 
 func throw_item():
 	var p = projectile.instance()
-	print(p)
 	p.position = throw_from
 	p.angular_velocity = -randf() * 50
 	p.linear_velocity = throw_direction * throw_power
@@ -92,7 +91,6 @@ func throw_item():
 	player_anim.play("throw")
 
 func setup_game():
-	print(Globals.current_char)
 	var hero_type = Globals.characters_t[Globals.current_char]
 	var hero = hero_type.instance()
 	hero.position = get_random_from_array(spawn_locations, true)
