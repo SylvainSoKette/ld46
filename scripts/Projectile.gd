@@ -20,6 +20,9 @@ func _process(dt):
 	):
 		queue_free()
 
+func get_eaten():
+	animation.play("fade_out")
+
 func _on_Timer_timeout():
 	animation.play("fade_out")
 

@@ -14,7 +14,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 8.0
-margin_top = 16.0
+margin_top = 8.0
 margin_right = 312.0
 margin_bottom = 172.0
 grow_horizontal = 0
@@ -25,23 +25,24 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="VBoxContainer"]
+margin_top = 19.0
 margin_right = 304.0
-margin_bottom = 129.0
+margin_bottom = 126.0
+size_flags_vertical = 6
 custom_fonts/font = ExtResource( 3 )
 text = "The year is 2020, a new kind of plague struck the globe and doomed the entire civilisation.
 
 Stuck in quarantine, mankind invented a new kind of sport:
 BACKYARD MONSTER BATTLES.
 
-Choose your champion and help him win by throwing food at him ! Annoy his opponents with stones !
-(But don't do this in real life...)"
+Choose your champion and help him win by throwing food at him !"
 align = 1
 autowrap = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 133.0
+margin_top = 150.0
 margin_right = 304.0
-margin_bottom = 147.0
+margin_bottom = 164.0
 alignment = 1
 
 [node name="Back" type="Button" parent="VBoxContainer/HBoxContainer"]

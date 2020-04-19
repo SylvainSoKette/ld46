@@ -3,16 +3,10 @@ class_name Animal
 
 export var MOVE_SPEED = 20
 export var RUN_FACTOR = 3
+export var REACTIVITY_DELAY = 0.5
 
-enum STATE {
-	TURN,
-	MOVE,
-	RUN,
-	ATTACK,
-	EAT
-}
+var hero = false
 
-var current_state = STATE.MOVE
 var current_direction = Vector2.LEFT
 var current_speed = 0
 
@@ -40,11 +34,9 @@ func _process(dt):
 ###########################
 # STATES ##################
 ###########################
-func reset():
-	current_speed = 0
-
 func turn():
 	debug_label.text = "turn"
+	current_speed = 0
 	if current_direction == Vector2.RIGHT:
 		current_direction = Vector2.LEFT
 		hitbox_pivot.rotation_degrees = 180
@@ -61,47 +53,44 @@ func run():
 	current_speed = MOVE_SPEED * RUN_FACTOR
 
 func attack(enemy_hitbox):
+	current_speed = 0
 	enemy_hitbox.emit_signal('hit')
 
-func eat():
+func eat(food):
+	current_speed = 0
+	food.get_eaten()
 	debug_label.text = "eat"
-
-func choose_state():
-	var states = [
-		STATE.TURN,
-		STATE.MOVE,
-		STATE.RUN,
-		STATE.ATTACK,
-		STATE.EAT
-	]
-	current_state = get_random_from_array(states)
-
-	var food = is_food_at_range()
-	if food:
-		current_state = STATE.EAT
-	if is_food_front():
-		current_state = STATE.MOVE
-	if is_food_back():
-		current_state = STATE.TURN
-
-	var enemy = is_enemy_at_range()
-	if enemy:
-		attack(enemy)
-	if is_enemy_front():
-		print("enemy front !")
-	if is_enemy_back():
-		print("enemy back !")
 	
-
-#	var food_dist = is_food_front()
-#
-#	call({
-#		STATE.TURN: "turn",
-#		STATE.MOVE: "move",
-#		STATE.RUN: "run",
-#		STATE.ATTACK: "attack",
-#		STATE.EAT: "eat",
-#	}[current_state])
+func choose_action():
+	var food = is_food_at_range()
+	var enemy = is_enemy_at_range()
+	
+	# 'AI' -> if galore
+	if stats.hp < stats.MAX_HP:
+		if food:
+			eat(food)
+		elif is_food_front():
+			move()
+		elif is_food_back():
+			turn()
+	else:
+		if enemy:
+			attack(enemy)
+		elif is_enemy_front():
+			move()
+		elif is_enemy_back():
+			turn()
+		else:
+			if food:
+				eat(food)
+			else:
+				var rand = randi()
+				rand = rand % 3
+				match rand:
+					0: turn()
+					1: move()
+					2: turn()
+					3: run()
 
 ###########################
 # UTILS ###################
@@ -158,9 +147,9 @@ func get_random_from_array(array):
 # CALLBACKS ###############
 ###########################
 func _on_Timer_timeout():
-	var time_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-	timer.set_wait_time(get_random_from_array(time_list))
-	choose_state()
+	var time_offset = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+	timer.set_wait_time(REACTIVITY_DELAY + get_random_from_array(time_offset))
+	choose_action()
 
 func _on_Hitbox_hit():
 	stats.take_damage(1)

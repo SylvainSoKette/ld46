@@ -25,38 +25,10 @@ extents = Vector2( 12, 16 )
 collision_layer = 0
 script = ExtResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 1.19209e-06, -12 )
-scale = Vector2( 0.375, 0.375 )
-texture = ExtResource( 5 )
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -8 )
 rotation = 1.5708
 shape = SubResource( 1 )
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = -20.0
-margin_top = -64.0
-margin_right = 20.0
-margin_bottom = -24.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="DebugLabel" type="Label" parent="."]
-margin_left = -12.0
-margin_top = -28.0
-margin_right = 52.0
-margin_bottom = 4.0
-rect_scale = Vector2( 0.4, 0.4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HitboxPivot" type="Position2D" parent="."]
 position = Vector2( 0, -8 )
@@ -69,12 +41,12 @@ collision_mask = 6
 shape = SubResource( 2 )
 
 [node name="Hitbox" parent="HitboxPivot" instance=ExtResource( 1 )]
-position = Vector2( 0, -4 )
 
 [node name="CollisionShape2D" parent="HitboxPivot/Hitbox" index="0"]
 shape = SubResource( 3 )
 
 [node name="Frontdetecter" type="Area2D" parent="HitboxPivot"]
+position = Vector2( 0, 8 )
 collision_layer = 0
 collision_mask = 6
 
@@ -83,6 +55,7 @@ position = Vector2( 44, -8 )
 shape = SubResource( 4 )
 
 [node name="Backdetector" type="Area2D" parent="HitboxPivot"]
+position = Vector2( 0, 8 )
 collision_layer = 0
 collision_mask = 6
 
@@ -90,12 +63,31 @@ collision_mask = 6
 position = Vector2( -12, -8 )
 shape = SubResource( 5 )
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -6 )
+scale = Vector2( 0.375, 0.375 )
+texture = ExtResource( 5 )
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_left = -13.0
+margin_top = -18.0
+margin_right = 51.0
+margin_bottom = 14.0
+rect_scale = Vector2( 0.4, 0.4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
 [node name="Stats" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, -24 )
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+position = Vector2( 0, -14 )
 [connection signal="hit" from="HitboxPivot/Hitbox" to="." method="_on_Hitbox_hit"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="dead" from="Stats" to="." method="_on_Stats_dead"]
 
 [editable path="HitboxPivot/Hurtbox"]

@@ -1,13 +1,5 @@
 extends Control
 
-var current_char = 0
-var characters = [
-	"racoon",
-	"seagull",
-	"cat",
-	"rat" 
-]
-
 onready var character_portrait = $Menu/Body/Character/Portrait
 
 func _ready():
@@ -18,15 +10,15 @@ func _process(dt):
 		get_tree().quit()
 
 func update_character_portrait():
-	current_char = current_char % len(characters)
-	character_portrait.get_node("DebugName").text = characters[current_char]
+	Globals.current_char = Globals.current_char % len(Globals.characters)
+	character_portrait.get_node("DebugName").text = Globals.characters[Globals.current_char]
 
 func _on_Previous_pressed():
-	current_char -= 1
+	Globals.current_char -= 1
 	update_character_portrait()
 
 func _on_Next_pressed():
-	current_char += 1
+	Globals.current_char += 1
 	update_character_portrait()
 
 func _on_Start_pressed():

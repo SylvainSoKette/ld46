@@ -46,7 +46,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Buttons" type="VBoxContainer" parent="Menu/Body"]
-margin_right = 140.0
+margin_right = 172.0
 margin_bottom = 84.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -54,27 +54,27 @@ alignment = 1
 
 [node name="Start" type="Button" parent="Menu/Body/Buttons"]
 margin_top = 17.0
-margin_right = 140.0
+margin_right = 172.0
 margin_bottom = 31.0
 custom_fonts/font = ExtResource( 4 )
 text = "Start"
 
 [node name="Story" type="Button" parent="Menu/Body/Buttons"]
 margin_top = 35.0
-margin_right = 140.0
+margin_right = 172.0
 margin_bottom = 49.0
 custom_fonts/font = ExtResource( 4 )
 text = "Story"
 
 [node name="Quit" type="Button" parent="Menu/Body/Buttons"]
 margin_top = 53.0
-margin_right = 140.0
+margin_right = 172.0
 margin_bottom = 67.0
 custom_fonts/font = ExtResource( 4 )
 text = "Quit"
 
 [node name="Character" type="HBoxContainer" parent="Menu/Body"]
-margin_left = 144.0
+margin_left = 176.0
 margin_right = 304.0
 margin_bottom = 84.0
 alignment = 1
@@ -88,7 +88,7 @@ flat = true
 
 [node name="Portrait" type="TextureRect" parent="Menu/Body/Character"]
 margin_left = 48.0
-margin_right = 112.0
+margin_right = 80.0
 margin_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -104,8 +104,8 @@ __meta__ = {
 }
 
 [node name="Next" type="Button" parent="Menu/Body/Character"]
-margin_left = 116.0
-margin_right = 160.0
+margin_left = 84.0
+margin_right = 128.0
 margin_bottom = 84.0
 size_flags_horizontal = 0
 icon = SubResource( 2 )
